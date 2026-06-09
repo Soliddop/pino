@@ -115,6 +115,43 @@
         },
       });
     }
+  } else {
+    /* mobile: cards stack vertically — reveal + tilt each in, parallax inside frame */
+    const intro = document.querySelector("[data-table] .table__intro");
+    if (intro) {
+      gsap.from(intro.children, {
+        yPercent: 45,
+        opacity: 0,
+        duration: 1,
+        ease: "expo.out",
+        stagger: 0.12,
+        scrollTrigger: { trigger: intro, start: "top 85%" },
+      });
+    }
+    gsap.utils.toArray("[data-table] .table__card").forEach((card, i) => {
+      gsap.from(card, {
+        yPercent: 16,
+        opacity: 0,
+        scale: 0.94,
+        rotation: i % 2 ? 2.5 : -2.5,
+        duration: 1.1,
+        ease: "expo.out",
+        scrollTrigger: { trigger: card, start: "top 88%" },
+      });
+      const img = card.querySelector("img");
+      if (img) {
+        gsap.set(img, { scale: 1.22 }); // buffer so parallax never reveals frame edges
+        gsap.fromTo(
+          img,
+          { yPercent: -8 },
+          {
+            yPercent: 8,
+            ease: "none",
+            scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
+          }
+        );
+      }
+    });
   }
 
   /* -------------------- catalogue split entrance --------------------- */
@@ -126,6 +163,20 @@
       ease: "expo.out",
       stagger: 0.14,
       scrollTrigger: { trigger: "[data-catalogue]", start: "top 70%" },
+    });
+  } else {
+    /* mobile: halves stack — slow photo zoom-out + words rise as each enters */
+    gsap.utils.toArray("[data-catalogue] .catalogue__half").forEach((half) => {
+      const photo = half.querySelector(".catalogue__photo");
+      const inner = half.querySelector(".catalogue__inner");
+      const tl = gsap.timeline({ scrollTrigger: { trigger: half, start: "top 82%" } });
+      if (photo) tl.from(photo, { scale: 1.25, opacity: 0, duration: 1.3, ease: "power3.out" }, 0);
+      if (inner)
+        tl.from(
+          inner.children,
+          { yPercent: 65, opacity: 0, duration: 1, ease: "expo.out", stagger: 0.12 },
+          0.2
+        );
     });
   }
 
