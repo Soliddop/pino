@@ -256,10 +256,16 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-size: clamp(2.6rem, 6.2vw, 6rem);
   letter-spacing: -0.015em;
 }
+/* reveal mask: SplitText wraps each line in overflow:hidden — pad it so the
+   display face's ascenders/descenders aren't cropped (tight line-height 0.92). */
+.line-clip { padding: 0.18em 0; margin-block: -0.18em; }
+
+.story__accent { color: var(--green); }
+
 .story__body { font-size: clamp(1rem, 1.15vw, 1.12rem); max-width: 46ch; }
 .story__body p + p { margin-top: 1.1em; }
 .story__lead { font-size: 1.18em; margin-bottom: 1.1em; }
-.story__lead::first-letter { color: var(--tomato); }
+.story__lead::first-letter { color: var(--green); }
 
 .story__frames {
   max-width: var(--maxw);
@@ -359,7 +365,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .catalogue__photo {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0; /* not -1: iOS Safari paints negative-z transformed children behind the half's bg */
   background-size: cover;
   background-position: center;
   opacity: 0;
@@ -375,6 +381,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 
 .catalogue__inner {
   position: relative;
+  z-index: 1; /* sit above the photo now that it is z-index:0 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -402,11 +409,38 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .catalogue__half--drink .catalogue__script { color: var(--tomato); }
 .catalogue__half--drink .catalogue__word   { color: var(--green); }
 
+/* "view menu" cue — signals the halves are clickable */
+.catalogue__cta {
+  margin-top: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.62rem 1.25rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  transition: color 0.5s var(--ease), background 0.5s var(--ease), border-color 0.5s var(--ease);
+}
+.catalogue__arrow { transition: transform 0.4s var(--ease); }
+.catalogue__half--food  .catalogue__cta { color: var(--green-deep); }
+.catalogue__half--drink .catalogue__cta { color: var(--green); }
+
 /* hover — reveal photo, flip text to paper, nudge up */
 .catalogue__half:hover .catalogue__photo { opacity: 1; transform: scale(1); }
 .catalogue__half:hover .catalogue__inner { transform: translateY(-0.4rem); }
 .catalogue__half:hover .catalogue__script,
 .catalogue__half:hover .catalogue__word { color: var(--paper); }
+.catalogue__half:hover .catalogue__cta {
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--paper);
+}
+.catalogue__half:hover .catalogue__arrow { transform: translateX(0.35rem); }
 .catalogue:hover .catalogue__half { flex-grow: 0.92; }
 .catalogue:hover .catalogue__half:hover { flex-grow: 1.16; }
 
@@ -625,6 +659,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .reserve__col h3 { font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tomato); margin-bottom: 1rem; padding-bottom: .7rem; border-bottom: 1px solid rgba(33,59,43,.25); }
 .reserve__col li { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.35rem 0; font-size: 0.98rem; }
 .reserve__col a:hover { color: var(--tomato); }
+.reserve__col a { display: inline-flex; align-items: center; gap: 0.6rem; }
+.reserve__ico { width: 1.05em; height: 1.05em; flex: none; color: var(--tomato); }
 
 /* footer */
 /* ========================== FOOTER ============================== */
@@ -633,7 +669,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   overflow: hidden;
   background: var(--green);
   color: var(--ivory);
-  padding: clamp(3rem, 7vw, 6rem) var(--gut) clamp(5rem, 9vw, 8rem);
+  padding: clamp(3rem, 7vw, 6rem) var(--gut) clamp(7rem, 12vw, 11rem);
 }
 .footer__decorative {
   position: absolute;
@@ -643,7 +679,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   width: 124%;                  /* over-wide so left/right edges bleed past canvas */
   height: auto;
   pointer-events: none;
-  transform: translate(-50%, 60%);  /* center the bleed; push most of it below footer edge — overflow:hidden clips it */
+  transform: translate(-50%, 74%);  /* push most of it below footer edge so it sits clear of the legal row — overflow:hidden clips it */
 }
 .footer__top {
   position: relative;
@@ -676,7 +712,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .footer__word {
   position: relative;
   z-index: 2;
-  margin: clamp(3rem, 8vw, 7rem) 0 clamp(2.5rem, 6vw, 5rem);
+  margin: clamp(3rem, 8vw, 7rem) 0 clamp(4rem, 8vw, 7rem);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(4.5rem, 19vw, 22rem);
@@ -884,6 +920,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .catalogue__half { flex-basis: 50svh; min-height: 50svh; }
   .catalogue__photo { opacity: 1; transform: scale(1); }
   .catalogue__script, .catalogue__word { color: var(--paper) !important; }
+  .catalogue__cta { color: var(--paper) !important; border-color: var(--paper); }
   .catalogue:hover .catalogue__half,
   .catalogue:hover .catalogue__half:hover { flex-grow: 1; }
   .catalogue__seam { left: 0; right: 0; width: auto; top: 50%; height: 1px; bottom: auto; transform: translateY(-50%); }
