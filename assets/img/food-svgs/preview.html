@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pino Food SVG Preview</title>
+  <style>
+    :root { color-scheme: dark; --green: #193f2b; --paper: #f4ecdc; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: var(--paper);
+      font: 14px/1.4 system-ui, sans-serif;
+    }
+    main {
+      width: min(980px, calc(100vw - 48px));
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 28px;
+    }
+    figure { margin: 0; text-align: center; }
+    img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+    figcaption { margin-top: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .82; }
+  </style>
+</head>
+<body>
+  <main>
+    <figure><img src="pino-food-artichoke.svg" alt="Artichoke" /><figcaption>Carciofo</figcaption></figure>
+    <figure><img src="pino-food-pasta.svg" alt="Pasta" /><figcaption>Pasta</figcaption></figure>
+    <figure><img src="pino-food-pizza.svg" alt="Pizza" /><figcaption>Pizza</figcaption></figure>
+    <figure><img src="pino-food-suppli.svg" alt="Fritti" /><figcaption>Fritti</figcaption></figure>
+    <figure><img src="pino-food-tiramisu.svg" alt="Tiramisu" /><figcaption>Tiramisu</figcaption></figure>
+    <figure><img src="pino-food-aperitivo.svg" alt="Aperitivo" /><figcaption>Aperitivo</figcaption></figure>
+  </main>
+</body>
+</html>

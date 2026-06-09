@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Tooling / local
+.claude/
+node_modules/
+
+# Unreferenced raw assets (not used by the site) — root-anchored so
+# assets/img/photos/ (which the site DOES use) is still tracked
+/photos/
+/refs/
+/gsap-public/
+
+# Internal planning docs (not part of the website)
+plan.md
+CONTEXT.md
+Προσφορά για Επανασχεδίαση pino.gr 1.md
