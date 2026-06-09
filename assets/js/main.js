@@ -256,6 +256,29 @@
     }
   }
 
+  /* ---------------------- instagram feed reveal --------------------- */
+  {
+    const items = gsap.utils.toArray("[data-insta] .insta__item");
+    if (items.length) {
+      gsap.from("[data-insta] .insta__head", {
+        y: 24,
+        opacity: 0,
+        duration: 1,
+        ease: "expo.out",
+        scrollTrigger: { trigger: "[data-insta]", start: "top 85%" },
+      });
+      gsap.from(items, {
+        y: 42,
+        opacity: 0,
+        scale: 0.96,
+        duration: 0.9,
+        ease: "expo.out",
+        stagger: { each: 0.06, grid: "auto", from: "start" },
+        scrollTrigger: { trigger: "[data-insta] .insta__grid", start: "top 82%" },
+      });
+    }
+  }
+
   ScrollTrigger.refresh();
 
   /* =================================================================== */
@@ -363,7 +386,7 @@
   function initHeaderState() {
     const header = document.querySelector("[data-header]");
     if (!header) return;
-    const light = document.querySelectorAll(".story, .menu");
+    const light = document.querySelectorAll(".story, .menu, .insta");
     if (!hasGSAP) return;
     light.forEach((sec) => {
       ScrollTrigger.create({
