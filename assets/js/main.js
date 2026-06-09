@@ -51,8 +51,8 @@
   intro.from("[data-hero-sub]", { y: 24, opacity: 0, duration: 1 }, "-=0.6");
   intro.from(".scroll-cue", { opacity: 0, scale: 0.7, duration: 0.8 }, "-=0.7");
   // header reveals early (small delay) instead of chained to the end of the hero sequence
-  intro.from(".header__actions > *", { y: -20, opacity: 0, duration: 0.7, stagger: 0.1 }, 0.45);
-  intro.from(".header__brand", { y: -20, opacity: 0, duration: 0.7 }, 0.5);
+  intro.from(".header__actions > *", { y: -20, opacity: 0, duration: 0.7, stagger: 0.1, clearProps: "transform" }, 0.45);
+  intro.from(".header__brand", { y: -20, opacity: 0, duration: 0.7, clearProps: "transform" }, 0.5);
   intro.to(".header__menu-edge", { opacity: 0.85, duration: 1 }, 0.8);
 
   /* ------------------------- hero parallax --------------------------- */

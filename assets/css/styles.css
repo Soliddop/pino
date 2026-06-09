@@ -57,6 +57,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-height: 44px;             /* Apple HIG: 44pt minimum tap target */
   gap: 0.55em;
   font-family: var(--font-body);
   font-size: 0.78rem;
@@ -71,9 +73,9 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .btn--reserve { background: var(--tomato); color: var(--paper); }
 .btn--reserve:hover { background: var(--saffron); color: var(--ink); }
-.btn--menu { padding-left: 1.1em; padding-right: 1.1em; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
+.btn--menu { min-width: 44px; padding-left: 1.1em; padding-right: 1.1em; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
 .btn--menu:hover { background: rgba(255,255,255,.2); }
-.btn--ig { background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
+.btn--ig { min-width: 44px; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
 .btn--ig svg { display: block; }
 .btn__ig-label { transform: translateY(0.08em); }  /* drop caps to optical center, match menu label */
 .btn--ig:hover { background: var(--tomato); color: var(--paper); }
@@ -421,6 +423,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   line-height: 1;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  min-height: 44px;             /* Apple HIG tap target */
   padding: 0.62rem 1.25rem;
   border: 1.5px solid currentColor;
   border-radius: 999px;
@@ -635,6 +638,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .reserve__food--6 { bottom: 8%; left: 30%; }
 
 @media (max-width: 720px) {
+  /* --2 overlapped the "Sunday" hours row on mobile */
+  .reserve__food--2,
   .reserve__food--5,
   .reserve__food--6 { display: none; }
 }
@@ -659,7 +664,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .reserve__col h3 { font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tomato); margin-bottom: 1rem; padding-bottom: .7rem; border-bottom: 1px solid rgba(33,59,43,.25); }
 .reserve__col li { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.35rem 0; font-size: 0.98rem; }
 .reserve__col a:hover { color: var(--tomato); }
-.reserve__col a { display: inline-flex; align-items: center; gap: 0.6rem; }
+.reserve__col a { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 44px; }
 .reserve__ico { width: 1.05em; height: 1.05em; flex: none; color: var(--tomato); }
 
 /* footer */
@@ -690,7 +695,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   gap: 2rem;
   flex-wrap: wrap;
 }
-.footer__brand img { height: 84px; width: auto; }
+.footer__brand img { height: clamp(84px, 13vw, 220px); width: auto; }
 .footer__cols { display: flex; gap: clamp(2rem, 6vw, 5rem); flex-wrap: wrap; }
 .footer__col { display: flex; flex-direction: column; gap: 0.5rem; }
 .footer__head {
@@ -743,6 +748,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .footer__ig {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;             /* Apple HIG tap target */
   gap: 0.6em;
   padding: 0.7em 1.2em;
   border-radius: 999px;
