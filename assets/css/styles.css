@@ -556,7 +556,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   position: absolute;
   top: clamp(6.5rem, 15vh, 10rem);   /* clear the fixed header/logo */
   left: 0; right: 0;
-  z-index: 5;
+  z-index: 20;                       /* above lead card (z-10) so "at Pino." isn't covered */
   text-align: center;
   pointer-events: none;
 }
@@ -573,6 +573,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   line-height: 0.86;
   font-size: clamp(2.4rem, 7vw, 6rem);
   letter-spacing: -0.015em;
+  text-shadow: 0 2px 30px rgba(20, 40, 25, 0.55);  /* legible where the photo pile rises behind it */
 }
 .scatter__stage {
   position: absolute;
@@ -728,10 +729,12 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   margin: clamp(3rem, 8vw, 7rem) 0 clamp(4rem, 8vw, 7rem);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(4.5rem, 19vw, 22rem);
+  /* phrase is long — nowrap at 19vw overflowed (clipped to "Buon appet") at every
+     width; wrap it and size so the widest line ("appetito.") fits the viewport */
+  font-size: clamp(4rem, 13vw, 18rem);
   line-height: 0.82;
   letter-spacing: -0.03em;
-  white-space: nowrap;
+  white-space: normal;
   color: var(--ivory);
   transform-origin: left center;
 }
@@ -958,6 +961,34 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .insta__grid { grid-template-columns: repeat(2, 1fr); }
   .insta__head { justify-content: center; text-align: center; }
   .insta__bio { display: none; }
+}
+
+/* Laptop / short landscape (MacBook 14" 982h, 16" 1117h, 1080p monitors).
+   Title was sized off viewport WIDTH (17vw) and tuned for tall screens, so on
+   wide-but-short displays it filled the height — pushing the subtitle and the
+   Reserve/Menu buttons off-screen and into the foot animation, and crowding the
+   logo. Here we size the hero off viewport HEIGHT and shrink the foot art so the
+   buttons clear it. >1200h (true desktop monitors) keeps the big original. */
+@media (min-width: 901px) and (max-height: 1200px) {
+  /* logo block is ~138px tall (width-driven, fixed regardless of height), so the
+     title must start below that — then everything shrinks to still fit the short
+     viewport above the foot animation */
+  .hero__inner   { padding-top: clamp(10rem, 15vh, 11.5rem); }
+  .hero__title   { font-size: clamp(3.4rem, 9.5vh, 8rem); }
+  .hero__sub     { margin-top: clamp(0.8rem, 1.6vh, 1.4rem); }
+  .hero__actions { margin-top: clamp(1rem, 2vh, 1.8rem); }
+  .hero__anima   { width: min(360px, 34vw); bottom: 0; }
+
+  /* gallery heading also has to clear the ~138px logo on short viewports */
+  .scatter__head  { top: clamp(9.5rem, 16vh, 11rem); }
+  /* drop the photo pile so the top cards sit below the heading */
+  .scatter__stage { transform: translateY(5vh); }
+}
+
+/* extra-short viewports (14"/16" MacBook with browser chrome ≈ 700–800px tall) —
+   shrink the foot animation further so the Reserve/Menu buttons clear it */
+@media (min-width: 901px) and (max-height: 820px) {
+  .hero__anima { width: min(270px, 26vw); }
 }
 
 /* ===================== REDUCED MOTION ============================ */
