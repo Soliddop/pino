@@ -566,8 +566,8 @@
       ...document.querySelectorAll('a[href*="catalogue.html"]'),
     ];
     dead.forEach((a) => {
-      if (a.matches("[data-cat-half]")) {
-        // MANGIA / BEVI split halves: keep the hover reveal alive, block navigation only
+      if (a.matches("[data-cat-half], .overlay__nav ul a")) {
+        // keep the hover reveal alive (color/slide + preview image), block navigation only
         a.setAttribute("aria-disabled", "true");
         a.style.cursor = "default";
         blockNav(a);
