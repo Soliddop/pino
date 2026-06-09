@@ -368,11 +368,19 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   position: absolute;
   inset: 0;
   z-index: 0; /* not -1: iOS Safari paints negative-z transformed children behind the half's bg */
-  background-size: cover;
-  background-position: center;
   opacity: 0;
   transform: scale(1.12);
   transition: opacity 0.7s var(--ease), transform 1.1s var(--ease);
+}
+/* real <img>, not a CSS background: iOS Safari drops large background-image
+   webp under its decoded-image memory cap, but keeps <img>. */
+.catalogue__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 .catalogue__photo::after {
   content: "";
