@@ -73,6 +73,10 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .btn--reserve:hover { background: var(--saffron); color: var(--ink); }
 .btn--menu { padding-left: 1.1em; padding-right: 1.1em; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
 .btn--menu:hover { background: rgba(255,255,255,.2); }
+.btn--ig { background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
+.btn--ig svg { display: block; }
+.btn__ig-label { transform: translateY(0.08em); }  /* drop caps to optical center, match menu label */
+.btn--ig:hover { background: var(--tomato); color: var(--paper); }
 .btn__menu-label { transform: translateY(0.08em); }  /* drop caps to match bars' optical center */
 .btn__menu-bars { display: inline-flex; flex-direction: column; gap: 4px; }
 .btn__menu-bars i { display: block; width: 18px; height: 2px; background: currentColor; }
@@ -94,14 +98,24 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .site-header > * { pointer-events: auto; }
 
-.header__brand { justify-self: center; grid-column: 2; }
+.header__brand { justify-self: center; grid-column: 2; --logo-fill: var(--paper); }
 .header__brand img {
   width: clamp(80px, 8vw, 112px);
   height: auto;
   filter: brightness(0) invert(1);
   transition: filter .5s var(--ease);
 }
+/* inline SVG variant (swapped in by JS so GSAP can tween the fill) */
+.header__brand svg {
+  width: clamp(80px, 8vw, 112px);
+  height: auto;
+  display: block;
+}
+.header__brand svg path { fill: var(--logo-fill); transition: fill .4s var(--ease); }
 .site-header[data-scrolled="dark"] .header__brand img { filter: none; }
+.site-header[data-scrolled="dark"] .header__brand { --logo-fill: var(--ink); }
+/* reduced-motion / no-JS fallback: plain CSS hover tint (GSAP overrides when active) */
+.header__brand:hover svg path { fill: var(--tomato); }
 
 .header__actions { grid-column: 3; justify-self: end; display: flex; gap: 0.7rem; }
 
@@ -233,7 +247,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: clamp(2rem, 6vw, 6rem);
-  align-items: end;
+  align-items: start;
 }
 .story__statement {
   font-family: var(--font-display);
@@ -243,6 +257,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   letter-spacing: -0.015em;
 }
 .story__body { font-size: clamp(1rem, 1.15vw, 1.12rem); max-width: 46ch; }
+.story__body p + p { margin-top: 1.1em; }
 .story__lead { font-size: 1.18em; margin-bottom: 1.1em; }
 .story__lead::first-letter { color: var(--tomato); }
 
@@ -494,7 +509,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .scatter__head {
   position: absolute;
-  top: clamp(2.5rem, 8vh, 6rem);
+  top: clamp(6.5rem, 15vh, 10rem);   /* clear the fixed header/logo */
   left: 0; right: 0;
   z-index: 5;
   text-align: center;
@@ -618,7 +633,17 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   overflow: hidden;
   background: var(--green);
   color: var(--ivory);
-  padding: clamp(3rem, 7vw, 6rem) var(--gut) clamp(1.4rem, 3vw, 2.2rem);
+  padding: clamp(3rem, 7vw, 6rem) var(--gut) clamp(5rem, 9vw, 8rem);
+}
+.footer__decorative {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 1;
+  width: 124%;                  /* over-wide so left/right edges bleed past canvas */
+  height: auto;
+  pointer-events: none;
+  transform: translate(-50%, 60%);  /* center the bleed; push most of it below footer edge — overflow:hidden clips it */
 }
 .footer__top {
   position: relative;
@@ -677,9 +702,48 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.footer__social { display: flex; gap: 1.6rem; }
+.footer__social { display: flex; align-items: center; gap: 1.6rem; }
 .footer__social a:hover { color: var(--tomato); }
+.footer__ig {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.7em 1.2em;
+  border-radius: 999px;
+  background: var(--tomato);
+  color: var(--paper);
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background-color .4s var(--ease), color .4s var(--ease), transform .4s var(--ease);
+}
+.footer__ig svg { display: block; }
+.footer__ig:hover { background: var(--saffron); color: var(--ink); transform: translateY(-2px); }
 .footer__legal { opacity: .7; }
+
+/* ========================= BACK TO TOP ========================== */
+.to-top {
+  position: fixed;
+  right: clamp(1rem, 2.4vw, 1.8rem);
+  bottom: clamp(1rem, 2.4vw, 1.8rem);
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--tomato);
+  color: var(--paper);
+  box-shadow: 0 6px 20px rgba(27,23,18,.28);
+  opacity: 0;
+  transform: translateY(1rem) scale(0.9);
+  pointer-events: none;
+  transition: opacity .4s var(--ease), transform .4s var(--ease), background-color .3s var(--ease);
+}
+.to-top svg { display: block; }
+.to-top.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+.to-top:hover { background: var(--saffron); color: var(--ink); transform: translateY(-2px); }
+.footer__legal-links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+.footer__legal-links a:hover { color: var(--tomato); }
 
 /* ===================== FULL-SCREEN OVERLAY ======================= */
 .overlay {
@@ -738,6 +802,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   body { font-size: 16px; }
   .header__menu-edge { display: none; }
   .btn__menu-label { display: none; }
+  .btn__ig-label { display: none; }
 
   /* logo left, actions right (edges hidden on mobile) */
   .site-header { grid-template-columns: auto 1fr; }

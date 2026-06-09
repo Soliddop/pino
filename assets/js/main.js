@@ -11,6 +11,8 @@
   /* ---------------------- always-on behaviours ----------------------- */
   initOverlay();
   initHeaderState();
+  initLogoHover(); // inline the header logo so GSAP can tween its fill white -> orange on hover
+  initBackToTop(); // floating button -> smooth scroll to top, shows after the first viewport
   initPinoAnima(); // looping food-toss line-art in the hero (handles reduced/no-GSAP itself)
   initScatterStatic(); // resting collage layout; GSAP overrides with scroll scatter below
   initAnchorScroll(); // smooth in-page scroll for [data-scroll-to] links
@@ -322,6 +324,80 @@
     });
   }
 
+  /* ----------------------- back to top button ----------------------- */
+  function initBackToTop() {
+    const btn = document.querySelector("[data-to-top]");
+    if (!btn) return;
+    btn.removeAttribute("hidden");
+
+    const toTop = () => {
+      const sm = window.ScrollSmoother && ScrollSmoother.get && ScrollSmoother.get();
+      if (sm) sm.scrollTo(0, !reduced);
+      else window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    };
+    btn.addEventListener("click", toTop);
+
+    const show = () => btn.classList.add("is-visible");
+    const hide = () => btn.classList.remove("is-visible");
+
+    if (hasGSAP) {
+      ScrollTrigger.create({
+        start: () => window.innerHeight * 0.8,
+        end: "max",
+        onToggle: (self) => (self.isActive ? show() : hide()),
+      });
+    } else {
+      const onScroll = () => (window.scrollY > window.innerHeight * 0.8 ? show() : hide());
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+  }
+
+  /* ----------- logo hover: inline SVG + GSAP fill white -> orange ----- */
+  function initLogoHover() {
+    const header = document.querySelector("[data-header]");
+    const brand = document.querySelector(".header__brand");
+    const img = brand && brand.querySelector("img");
+    if (!brand || !img) return;
+
+    fetch(img.getAttribute("src"))
+      .then((r) => r.text())
+      .then((markup) => {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = markup;
+        const svg = tmp.querySelector("svg");
+        if (!svg) return;
+        svg.removeAttribute("width");
+        svg.removeAttribute("height");
+        svg.setAttribute("aria-hidden", "true");
+        img.replaceWith(svg); // CSS now drives base fill via --logo-fill; :hover is the no-GSAP fallback
+
+        if (!hasGSAP || reduced) return; // CSS :hover handles the tint when motion is off
+        const paths = svg.querySelectorAll("path");
+        const css = getComputedStyle(document.documentElement);
+        const tomato = css.getPropertyValue("--tomato").trim() || "#cf5919";
+        const baseColor = () =>
+          (header && header.getAttribute("data-scrolled") === "dark"
+            ? css.getPropertyValue("--ink")
+            : css.getPropertyValue("--paper")
+          ).trim() || "#f4ecdc";
+
+        brand.addEventListener("mouseenter", () => {
+          gsap.to(paths, { fill: tomato, duration: 0.4, ease: "power2.out", overwrite: true });
+        });
+        brand.addEventListener("mouseleave", () => {
+          gsap.to(paths, {
+            fill: baseColor(),
+            duration: 0.45,
+            ease: "power2.out",
+            overwrite: true,
+            onComplete: () => paths.forEach((p) => p.style.removeProperty("fill")), // hand back to CSS var
+          });
+        });
+      })
+      .catch(() => {}); // fetch failed -> original <img> stays, no harm
+  }
+
   /* ----------- smooth in-page anchor scroll ------------------------- */
   function initAnchorScroll() {
     document.querySelectorAll("a[data-scroll-to]").forEach((a) => {
@@ -420,19 +496,33 @@
    *  secondary catalogue.html. Remove this whole block to restore.      *
    * ------------------------------------------------------------------ */
   (function previewLock() {
-    const dead = [
-      ...document.querySelectorAll(".overlay__nav ul a"),
-      ...document.querySelectorAll('a[href*="catalogue.html"]'),
-    ];
-    dead.forEach((a) => {
-      a.classList.add("is-disabled");
-      a.setAttribute("aria-disabled", "true");
-      a.setAttribute("tabindex", "-1");
+    const blockNav = (a) => {
       if (a.hasAttribute("href")) {
         a.dataset.href = a.getAttribute("href"); // stash for easy restore
         a.removeAttribute("href");
       }
       a.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); });
+    };
+    const fullyDisable = (a) => {
+      a.classList.add("is-disabled");        // pointer-events:none — kills hover too
+      a.setAttribute("aria-disabled", "true");
+      a.setAttribute("tabindex", "-1");
+      blockNav(a);
+    };
+
+    const dead = [
+      ...document.querySelectorAll(".overlay__nav ul a"),
+      ...document.querySelectorAll('a[href*="catalogue.html"]'),
+    ];
+    dead.forEach((a) => {
+      if (a.matches("[data-cat-half]")) {
+        // MANGIA / BEVI split halves: keep the hover reveal alive, block navigation only
+        a.setAttribute("aria-disabled", "true");
+        a.style.cursor = "default";
+        blockNav(a);
+      } else {
+        fullyDisable(a);
+      }
     });
   })();
 })();
