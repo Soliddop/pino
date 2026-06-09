@@ -51,6 +51,9 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 #smooth-wrapper { overflow: hidden; }
 
 /* --------------------------- buttons ----------------------------- */
+/* preview lock — inert links (overlay menu + catalogue) */
+.is-disabled { pointer-events: none; cursor: default; }
+
 .btn {
   display: inline-flex;
   align-items: center;

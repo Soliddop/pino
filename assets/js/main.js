@@ -413,4 +413,26 @@
     pino__tl.play();
     lines__tl.play();
   }
+
+  /* ------------------------------------------------------------------ *
+   *  PREVIEW LOCK — landing page only.                                  *
+   *  Disables the overlay menu nav links and every link to the          *
+   *  secondary catalogue.html. Remove this whole block to restore.      *
+   * ------------------------------------------------------------------ */
+  (function previewLock() {
+    const dead = [
+      ...document.querySelectorAll(".overlay__nav ul a"),
+      ...document.querySelectorAll('a[href*="catalogue.html"]'),
+    ];
+    dead.forEach((a) => {
+      a.classList.add("is-disabled");
+      a.setAttribute("aria-disabled", "true");
+      a.setAttribute("tabindex", "-1");
+      if (a.hasAttribute("href")) {
+        a.dataset.href = a.getAttribute("href"); // stash for easy restore
+        a.removeAttribute("href");
+      }
+      a.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); });
+    });
+  })();
 })();
