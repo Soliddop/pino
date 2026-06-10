@@ -936,8 +936,9 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .catalogue { flex-direction: column; }
   .catalogue__half { flex-basis: 50svh; min-height: 50svh; }
   .catalogue__photo { opacity: 1; transform: scale(1); }
-  .catalogue__script, .catalogue__word { color: var(--paper) !important; }
-  .catalogue__cta { color: var(--paper) !important; border-color: var(--paper); }
+  .catalogue__half--food .catalogue__script,
+  .catalogue__half--food .catalogue__word { color: var(--paper) !important; }
+  .catalogue__half--food .catalogue__cta  { color: var(--paper) !important; border-color: var(--paper); }
   .catalogue:hover .catalogue__half,
   .catalogue:hover .catalogue__half:hover { flex-grow: 1; }
   .catalogue__seam { left: 0; right: 0; width: auto; top: 50%; height: 1px; bottom: auto; transform: translateY(-50%); }
