@@ -73,8 +73,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .btn--reserve { background: var(--tomato); color: var(--paper); }
 .btn--reserve:hover { background: var(--saffron); color: var(--ink); }
-.btn--menu { min-width: 44px; padding-left: 1.1em; padding-right: 1.1em; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
-.btn--menu:hover { background: rgba(255,255,255,.2); }
+.btn--menu { min-width: 44px; padding-left: 1.1em; padding-right: 1.1em; background: var(--tomato); color: var(--paper); }
+.btn--menu:hover { background: var(--saffron); color: var(--ink); }
 .btn--ig { min-width: 44px; background: rgba(255,255,255,.1); color: var(--paper); backdrop-filter: blur(8px); }
 .btn--ig svg { display: block; }
 .btn__ig-label { transform: translateY(0.08em); }  /* drop caps to optical center, match menu label */
