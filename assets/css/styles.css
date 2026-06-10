@@ -608,8 +608,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   z-index: 10;
 }
 @media (max-width: 900px) {
-  .scatter__card { width: clamp(11rem, 60vw, 18rem); }
-  .scatter__card--lead { width: clamp(13rem, 72vw, 22rem); }
+  .scatter__card { width: clamp(8.5rem, 44vw, 14rem); }
+  .scatter__card--lead { width: clamp(10rem, 54vw, 16rem); }
 }
 
 .reserve {

@@ -8,6 +8,20 @@
   const isMobile = window.matchMedia("(max-width: 900px)").matches;
   const hasGSAP = typeof window.gsap !== "undefined";
 
+  /* Mobile scatter end-positions (by card DOM order). The narrow canvas can't
+     fit the desktop pile side-by-side, so phones get an explicit zig-zag
+     cascade — x = vw offset from centre, y = vh offset from centre, r = deg.
+     Cards alternate left/right down the column so each stays mostly exposed. */
+  const MOBILE_SCATTER = [
+    { x: -19, y: -15, r: -6 }, // 0 booth seating
+    { x: 19, y: -5.6, r: 6 }, // 1 dining room / oven
+    { x: -19, y: 23, r: -6 }, // 2 window table
+    { x: 19, y: 13.5, r: 7 }, // 3 cacio e pepe
+    { x: 18, y: 32.5, r: 6 }, // 4 pizza, greens + lemon
+    { x: -5, y: 41, r: -4 }, // 5 tiramisu
+    { x: -3, y: 3.9, r: 2 }, // 6 lead — thin pizza (z-10, sits on top)
+  ];
+
   /* ---------------------- always-on behaviours ----------------------- */
   initOverlay();
   initHeaderState();
@@ -216,23 +230,29 @@
         const dy = parseFloat(card.dataset.y) || 0;
         const dr = parseFloat(card.dataset.r) || 0;
         const stackRot = (i - (cards.length - 1) / 2) * 2; // slight fan while piled
+        const m = MOBILE_SCATTER[i]; // explicit phone cascade slot
         stTl.fromTo(
           card,
           { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: stackRot, scale: 0.92 },
           {
-            x: () => window.innerWidth * (dx / 100) * (window.innerWidth < 900 ? 0.5 : 1),
+            x: () => {
+              const w = window.innerWidth;
+              if (w < 900 && m) return (w * m.x) / 100; // vw offset → px
+              return w * (dx / 100);
+            },
             y: () => {
               const h = window.innerHeight;
+              if (window.innerWidth < 900 && m) return (h * m.y) / 100; // vh offset → px
               // wide-but-short desktops (1080p/1440p) — the pile rose into the
               // centred heading. Compress the vertical spread and bias it down so
               // the top cards drop clear of "A night at Pino." while the bottom
               // cards stay on-screen.
-              const shortLand = window.innerWidth >= 900 && h <= 1200; // matches the CSS short-viewport @media
-              const vmul = window.innerWidth < 900 ? 0.62 : shortLand ? 0.74 : 1;
+              const shortLand = h <= 1200; // matches the CSS short-viewport @media
+              const vmul = shortLand ? 0.74 : 1;
               const bias = shortLand ? h * 0.09 : 0;
               return h * (dy / 100) * vmul + bias;
             },
-            rotation: dr,
+            rotation: () => (window.innerWidth < 900 && m ? m.r : dr),
             scale: 1,
             ease: "power2.out",
           },
@@ -517,14 +537,16 @@
 
   /* ----------- scatter gallery resting layout (no-scroll) ----------- */
   function initScatterStatic() {
-    document.querySelectorAll("[data-scatter-stage] .scatter__card").forEach((card) => {
+    document.querySelectorAll("[data-scatter-stage] .scatter__card").forEach((card, i) => {
       const dx = parseFloat(card.dataset.x) || 0;
       const dy = parseFloat(card.dataset.y) || 0;
       const dr = parseFloat(card.dataset.r) || 0;
       const narrow = window.innerWidth < 900;
-      const fx = dx * (narrow ? 0.5 : 1);
-      const fy = dy * (narrow ? 0.62 : 1);
-      card.style.transform = `translate(calc(-50% + ${fx}vw), calc(-50% + ${fy}vh)) rotate(${dr}deg)`;
+      const m = narrow ? MOBILE_SCATTER[i] : null; // explicit phone cascade slot
+      const fx = m ? m.x : dx;
+      const fy = m ? m.y : dy;
+      const fr = m ? m.r : dr;
+      card.style.transform = `translate(calc(-50% + ${fx}vw), calc(-50% + ${fy}vh)) rotate(${fr}deg)`;
     });
   }
 
