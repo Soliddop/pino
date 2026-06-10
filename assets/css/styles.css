@@ -576,7 +576,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .scatter__heading {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 0.86;
+  line-height: 1.05;
   font-size: clamp(2.4rem, 7vw, 6rem);
   letter-spacing: -0.015em;
   text-shadow: 0 2px 30px rgba(20, 40, 25, 0.55);  /* legible where the photo pile rises behind it */
@@ -986,7 +986,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
    — see main.js scatter block — and the heading scales with height) */
 @media (min-width: 901px) and (max-height: 1200px) {
   .scatter__head    { top: clamp(8.5rem, 13vh, 10rem); }
-  .scatter__heading { font-size: clamp(2rem, 8vh, 5rem); line-height: 0.9; }
+  .scatter__heading { font-size: clamp(2rem, 8vh, 5rem); line-height: 1.05; }
 }
 
 /* tall laptops / 1080p (1000–1200h): big, width-driven title ≈ the 4k size */
