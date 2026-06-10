@@ -915,13 +915,16 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .overlay__nav li a:hover { color: var(--paper); transform: translateX(0.6rem); }
 .overlay__num { font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; color: rgba(244,236,220,.5); width: 2ch; }
 .overlay__reserve { margin-top: 2.4rem; }
+.overlay__mobile-extras { display: none; }
 
 /* ============================ RESPONSIVE ========================= */
 @media (max-width: 900px) {
   body { font-size: 16px; }
   .header__menu-edge { display: none; }
   .btn__menu-label { display: none; }
-  .btn__ig-label { display: none; }
+  .header__actions .btn--ig { display: none; }
+  .header__actions .lang-switch { display: none; }
+  .overlay__mobile-extras { display: flex; align-items: center; gap: 1rem; margin-top: 1.8rem; }
 
   /* logo left, actions right (edges hidden on mobile) */
   .site-header { grid-template-columns: auto 1fr; }
@@ -969,7 +972,6 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .insta__grid { grid-template-columns: repeat(2, 1fr); }
   .insta__head { justify-content: center; text-align: center; }
   .insta__bio { display: none; }
-  .lang-switch { display: none; }
 }
 
 /* Laptop / short landscape (MacBook 14" 982h, 16" 1117h, 1080p/1440p monitors).
