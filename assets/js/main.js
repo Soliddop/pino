@@ -207,7 +207,17 @@
           { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: stackRot, scale: 0.92 },
           {
             x: () => window.innerWidth * (dx / 100) * (window.innerWidth < 900 ? 0.5 : 1),
-            y: () => window.innerHeight * (dy / 100) * (window.innerWidth < 900 ? 0.62 : 1),
+            y: () => {
+              const h = window.innerHeight;
+              // wide-but-short desktops (1080p/1440p) — the pile rose into the
+              // centred heading. Compress the vertical spread and bias it down so
+              // the top cards drop clear of "A night at Pino." while the bottom
+              // cards stay on-screen.
+              const shortLand = window.innerWidth >= 900 && h <= 1200; // matches the CSS short-viewport @media
+              const vmul = window.innerWidth < 900 ? 0.62 : shortLand ? 0.74 : 1;
+              const bias = shortLand ? h * 0.09 : 0;
+              return h * (dy / 100) * vmul + bias;
+            },
             rotation: dr,
             scale: 1,
             ease: "power2.out",
