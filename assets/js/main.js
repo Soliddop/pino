@@ -17,6 +17,18 @@
   initScatterStatic(); // resting collage layout; GSAP overrides with scroll scatter below
   initAnchorScroll(); // smooth in-page scroll for [data-scroll-to] links
 
+  /* fake lang switch — visual toggle only */
+  document.querySelectorAll(".lang-switch__btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".lang-switch__btn").forEach((b) => {
+        b.classList.remove("lang-switch__btn--active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("lang-switch__btn--active");
+      btn.setAttribute("aria-pressed", "true");
+    });
+  });
+
   if (!hasGSAP || reduced) {
     return;
   }

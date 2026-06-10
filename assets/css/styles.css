@@ -87,6 +87,12 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .btn--ghost { border: 1px solid currentColor; padding: 1em 1.8em; }
 .btn--ghost:hover { background: var(--ink); color: var(--paper); }
 
+/* language switch */
+.lang-switch { display: flex; align-items: center; background: rgba(255,255,255,.1); border-radius: 999px; padding: 3px; gap: 2px; }
+.lang-switch__btn { font-family: var(--font-body); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; min-height: 32px; min-width: 34px; padding: 0 0.5rem; border-radius: 999px; color: rgba(244,236,220,.5); transition: background 0.25s var(--ease), color 0.25s var(--ease); }
+.lang-switch__btn--active { background: var(--paper); color: var(--ink); }
+.lang-switch__btn:not(.lang-switch__btn--active):hover { color: var(--paper); }
+
 /* ============================ HEADER ============================= */
 .site-header {
   position: fixed;
@@ -963,6 +969,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .insta__grid { grid-template-columns: repeat(2, 1fr); }
   .insta__head { justify-content: center; text-align: center; }
   .insta__bio { display: none; }
+  .lang-switch { display: none; }
 }
 
 /* Laptop / short landscape (MacBook 14" 982h, 16" 1117h, 1080p/1440p monitors).
